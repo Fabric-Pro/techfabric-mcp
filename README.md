@@ -17,12 +17,15 @@ https://www.techfabric.com/mcp
 ```
 
 It's a remote server over Streamable HTTP, so there's nothing to install, and
-it's free.
+it's free. The four read tools need no account. The author tools need a
+TechFabric engineer's Microsoft sign-in, which the server starts through OAuth
+the first time one is called.
 
 ## What's in this repository
 
-Descriptor files, so MCP directories have a repository to list. The server's
-code isn't here and isn't open source.
+Descriptor files, so MCP directories have a repository to list. The official
+MCP Registry entry names this repository, and GitHub's MCP Registry shows this
+README in Copilot. The server's code isn't here and isn't open source.
 
 | File | What it is |
 | --- | --- |
@@ -46,7 +49,7 @@ claude mcp add --transport http techfabric https://www.techfabric.com/mcp
 
 Add `--scope user` to have it in every project. TechFabric authors should
 install the [Claude Code plugin](https://github.com/Fabric-Pro/techfabric-claude-plugin)
-instead, which adds the server, the seven commands and a writing skill in one
+instead, which adds the server, the eleven commands and a writing skill in one
 go, and asks before every publish:
 
 ```sh
@@ -109,10 +112,35 @@ and so on in Copilot Chat.
 }
 ```
 
+### GitHub Copilot
+
+In VS Code, use the configuration above. Copilot CLI saves the server to
+`~/.copilot/mcp-config.json`, for every project:
+
+```sh
+copilot mcp add --transport http techfabric https://www.techfabric.com/mcp
+```
+
+Copilot's coding agent on github.com takes it in the repository's
+**Settings**, under **Copilot** and **MCP servers**. The
+coding agent can't complete an OAuth sign-in, so give it the read tools:
+
+```json
+{
+  "mcpServers": {
+    "techfabric": {
+      "type": "http",
+      "url": "https://www.techfabric.com/mcp",
+      "tools": ["search", "get_page", "list_posts", "get_services"]
+    }
+  }
+}
+```
+
 ### Anything else
 
 Point the client at the URL with the Streamable HTTP transport. Gemini CLI,
-GitHub Copilot CLI, OpenCode and Fabric Agents each have their own steps in the
+OpenCode and Fabric Agents each have their own steps in the
 [setup guide](https://www.techfabric.com/mcp-servers#set-up).
 
 ## Tools
@@ -129,25 +157,36 @@ Four read tools work for anyone:
 They answer only from published, indexable pages, so drafts and previews never
 show up in a result.
 
-Eight author tools need a TechFabric engineer's Microsoft sign-in. Called
+Eighteen author tools need a TechFabric engineer's Microsoft sign-in. Called
 anonymously, each answers with the sign-in challenge.
 
 | Tool | What it does |
 | --- | --- |
 | `get_brief` | Today's topic for a daily draft, held for the signed-in engineer for 24 hours |
-| `lint_draft` | Runs the site's rule-based checks on a draft's Markdown at once, each finding naming its passage |
+| `start_post` | Seven questions about the engineer's work and its reader, asked before anything is written |
+| `check_outline` | Checks an outline's title, opening, headings and FAQ before any prose |
+| `lint_draft` | Runs the site's rule-based checks on a draft's Markdown in about a second, each finding naming its passage |
 | `check_draft` | Runs the site's full readiness checks, the same ones the browser editor runs before publishing |
-| `submit_draft` | Files a post or case study into the blog pipeline under the engineer's own byline |
+| `submit_draft` | Files a post or case study under the engineer's own byline, with a preview |
 | `update_draft` | Saves a new version of one of the engineer's own drafts |
-| `get_status` | Says where one of your drafts stands: its state, what's failing and its preview |
+| `list_drafts` | The engineer's drafts, newest first, each with its state and next step |
+| `get_status` | Where one draft stands: its state, what's failing, its preview and, once live, its link |
 | `preview_draft` | Shows a draft as techfabric.com will render it, as an interactive app in hosts that support [MCP Apps](https://modelcontextprotocol.io/) |
-| `publish_draft` | Publishes one of your own drafts once its checks pass, and only after you confirm by the post's name |
+| `preview_diagram` | Parses each mermaid diagram in a post the way the site does, and says what the diagram rules flag |
+| `suggest_links_and_topics` | Pages of ours a draft should link, and unanswered searches that fit the engineer's work |
+| `review_before_publishing` | Whether a draft may publish, and the question to ask the engineer. Changes nothing |
+| `publish_draft` | Publishes one of the engineer's own drafts once its checks pass, and only after they confirm |
+| `revise_post` | Opens a revision of a live post as a draft with its own preview, for its author or the blog's editor |
+| `post_performance` | Search Console's clicks, impressions and position for a published post, and what to improve |
+| `social_post_kit` | What an agent needs to draft a LinkedIn post about a published post |
+| `lint_social` | The site's writing rules and the social rules, run on a LinkedIn post |
 
 ## Commands
 
-The server ships seven prompts, which most agents show as slash commands:
-`write-post`, `write-case-study`, `check`, `preview`, `publish`, `revise` and
-`status`. Each gives the agent the steps in order and points it at the house
+The server ships eleven prompts, which most agents show as slash commands:
+`write-post`, `write-case-study`, `check`, `preview`, `publish`, `revise`,
+`status`, `blog-post-template`, `case-study-template`, `linkedin-post` and
+`performance`. Each gives the agent the steps in order and points it at the house
 rules. In Claude Code with the plugin they're `/techfabric:write-post` and so
 on. The [setup guide](https://www.techfabric.com/mcp-servers#commands) has the
 equivalents for Codex, Cursor, Gemini CLI and Fabric Agents.
@@ -191,7 +230,8 @@ the same URL. In the official registry it's `com.techfabric/techfabric`.
 
 ## Links
 
-- [Setup guide for both TechFabric MCP servers](https://www.techfabric.com/mcp-servers#set-up)
+- [Setup guide for both TechFabric MCP servers](https://www.techfabric.com/mcp-servers#set-up), with every tool, resource and limit
+- [The official MCP Registry entry](https://registry.modelcontextprotocol.io/v0.1/servers/com.techfabric%2Ftechfabric/versions/latest)
 - [Claude Code plugin](https://github.com/Fabric-Pro/techfabric-claude-plugin)
 - [The Databricks Field Guide MCP server](https://github.com/Fabric-Pro/databricks-field-guide-mcp), TechFabric's other one, for Databricks questions
 - [TechFabric's blog](https://www.techfabric.com/blog)
