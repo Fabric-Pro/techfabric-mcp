@@ -131,7 +131,7 @@ coding agent can't complete an OAuth sign-in, so give it the read tools:
     "techfabric": {
       "type": "http",
       "url": "https://www.techfabric.com/mcp",
-      "tools": ["search", "get_page", "list_posts", "get_services"]
+      "tools": ["search", "get_page", "list_posts", "get_services", "explore_post", "compare_case_studies", "assess_databricks_readiness", "quiz_me"]
     }
   }
 }
@@ -145,7 +145,7 @@ OpenCode and Fabric Agents each have their own steps in the
 
 ## Tools
 
-Four read tools work for anyone:
+Eight read tools work for anyone:
 
 | Tool | What it does |
 | --- | --- |
@@ -153,9 +153,16 @@ Four read tools work for anyone:
 | `get_page` | Reads one published page as Markdown, with its title, description, dates, author, tags and FAQs |
 | `list_posts` | Lists blog posts, newest first, by tag, author or date |
 | `get_services` | Lists every service, solution, accelerator and product page, with the summary the live page gives |
+| `explore_post` | Walks through a post or case study step by step: its diagram's nodes in flow order, each tied to the section it's about |
+| `compare_case_studies` | Two or three case studies side by side: challenge, strategy, solution and results, in their own words |
+| `assess_databricks_readiness` | Eight questions about a data platform, scored, with where to start and links to the relevant pages |
+| `quiz_me` | A multiple-choice quiz from a post's own FAQs, scored, with the post's answer for each question |
 
 They answer only from published, indexable pages, so drafts and previews never
-show up in a result.
+show up in a result. In hosts that support [MCP Apps](https://modelcontextprotocol.io/),
+the last four open an interactive view (`ui://techfabric/explore`); clients that
+show forms ask the quiz and the readiness questions in one, and every result is
+complete as text.
 
 Eighteen author tools need a TechFabric engineer's Microsoft sign-in. Called
 anonymously, each answers with the sign-in challenge.
@@ -183,7 +190,11 @@ anonymously, each answers with the sign-in challenge.
 
 ## Commands
 
-The server ships eleven prompts, which most agents show as slash commands:
+Four reader prompts need no sign-in: `explain-post`, `compare-case-studies`,
+`assess-databricks-readiness` and `quiz-me`. They run the interactive tools
+above as slash commands.
+
+For authors, the server ships eleven prompts, which most agents show as slash commands:
 `write-post`, `write-case-study`, `check`, `preview`, `publish`, `revise`,
 `status`, `blog-post-template`, `case-study-template`, `linkedin-post` and
 `performance`. Each gives the agent the steps in order and points it at the house
@@ -199,6 +210,9 @@ Anyone:
 - "Find TechFabric's blog posts about MCP and summarise the newest one."
 - "Read techfabric.com's page on cloud migration and list the questions its
   FAQ answers."
+- "Walk me through TechFabric's post on the Business Central MCP server, step by step."
+- "Are we ready for Databricks? Run techfabric.com's readiness check with me."
+- "Quiz me on TechFabric's Lakebase branching post."
 
 A signed-in TechFabric author:
 
