@@ -21,6 +21,9 @@ it's free. The four read tools need no account. The author tools need a
 TechFabric engineer's Microsoft sign-in, which the server starts through OAuth
 the first time one is called.
 
+The same team publishes the [Databricks Field Guide](https://databricks.techfabric.com/) and its MCP server, and the
+[TechFabric Toolkit for Databricks](https://www.techfabric.com/databricks-toolkit), a free Chrome extension.
+
 ## What's in this repository
 
 Descriptor files, so MCP directories have a repository to list. The official
